@@ -1,7 +1,7 @@
 var Result;
 var Coins = {"BTC":"","LTC":"","XRP":"","ETH":"","DASH":""};
 const CoinName = Object.keys(Coins);
-var Myportfolio = {"walletvalue":"10000000","TotalValue":"0"};
+var Myportfolio = {"walletValue":10000000,"TotalValue":0};
 var i;
 
 function getCoin(name){
@@ -25,15 +25,20 @@ CoinName.forEach(name =>
 
 console.log(Coins);
 
-function Buy(){
-	result = parseInt(window.prompt("How many BTC Coins you wish to Purchase?", "1"));
-	Coins.BTC.INR = getCoin("BTC");
-	console.log(parseInt(Coins.BTC.INR));
-	if(result * Coins.BTC.INR > Myportfolio.TotalValue)
+function Buy(name){
+	result = parseInt(window.prompt(`How many ${name} Coins you wish to Purchase?`, "1"));
+	if(result * Coins[name].INR > Myportfolio.walletValue)
 		alert("Your wallet doesn't has enough Cash!")
 	else{
-		Myportfolio.BTC = {"numofcoins":result,"value":result*Coins.BTC.INR};
-		Myportfolio.TotalValue = Myportfolio.TotalValue - result*Coins.BTC.INR;
+		Myportfolio[name] = {"numofcoins":result,"value":result*Coins[name].INR};
+		Myportfolio.walletValue = Myportfolio.walletValue - result*Coins[name].INR;
+		Myportfolio.TotalValue = Myportfolio.TotalValue + result*Coins[name].INR;
+		console.log(Myportfolio);
+		var ul = document.getElementById("portfolio");
+		var li = document.createElement('li');
+		li.setAttribute('id',name);
+		li.appendChild(document.createTextNode(name + " " + Myportfolio[name].numofcoins + " " + Myportfolio[name].value));
+		ul.appendChild(li);
+		document.getElementById("portfolioValue").textContent = JSON.stringify(Myportfolio.TotalValue);
 	}
 }
-console.log(Myportfolio);
